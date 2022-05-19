@@ -11,8 +11,6 @@ namespace WaterDetector.Controllers
     {
         public ActionResult Index()
         {
-            Users us = new Users();
-            us.Login();
             return View();
         }
 
@@ -29,14 +27,6 @@ namespace WaterDetector.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
-        }
-        [HttpGet]
-        public JsonResult GetUsersDetails()
-        {
-            Users us = new Users();
-            List<UsersDetails> usersDetails = new List<UsersDetails>();
-            usersDetails = us.Login();
-            return Json(usersDetails, JsonRequestBehavior.AllowGet);
         }
     }
 }
