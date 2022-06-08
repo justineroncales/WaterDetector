@@ -48,6 +48,20 @@ namespace WaterDetector.Code
 
             return result;
         }
+
+        public bool LocationUpdates(int ID,string status)
+        {
+            using (conn)
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("spUpdateLocationsStatus", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@LOCATIONID", ID);
+                cmd.Parameters.AddWithValue("@STATUS", status);
+                cmd.ExecuteNonQuery();
+            }
+            return true;
+        }
         public void SendReports(UsersDetails users)
         {
             using (conn)
@@ -90,6 +104,29 @@ namespace WaterDetector.Code
             }
             return users;
         }
+        public string GetLocations(int ID)
+        {
+            string status = "";
+
+            using (conn)
+            {
+                DataTable dt = new DataTable();
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("spGetLocationStatus", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@LOCATIONID", ID);
+                cmd.CommandTimeout = 0;
+                SqlDataAdapter sqlData = new SqlDataAdapter();
+                sqlData.SelectCommand = cmd;
+                sqlData.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    status = row["STATUS"].ToString();
+                }
+            }
+            return status;
+        }
     }
     public class UsersDetails
     {
@@ -104,9 +141,17 @@ namespace WaterDetector.Code
         public string FULLNAME { get; set; }
         public int ID { get; set; }
         public string CREATED { get; set; }
+
+    }
+    public class Locations
+    {
+        public int id { get; set; }
+        public string status { get; set; }
+
     }
     public class UsersClass
     {
         public List<UsersDetails> details { get; set; }
+        public List<Locations> locations { get; set; }
     }
 }

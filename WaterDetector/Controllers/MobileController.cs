@@ -45,6 +45,23 @@ namespace WaterDetector.Controllers
                 return null;
             }
         }
+        
+        [HttpPost]
+        public ActionResult LocationUpdates(int ID,string status)
+        {
+            try
+            {
+                // TODO: Add insert logic here
+                Users user = new Users();
+                bool result = user.LocationUpdates(ID,status);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                ex.Message.ToString();
+                return null;
+            }
+        }
 
         [HttpPost]
         public ActionResult Login(UsersDetails collection)
@@ -86,14 +103,14 @@ namespace WaterDetector.Controllers
         }
 
         // POST: Mobile/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [HttpGet]
+        public ActionResult GetLocations(int ID)
         {
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                Users users = new Users();
+                string status= users.GetLocations(ID);
+                return Json(status, JsonRequestBehavior.AllowGet);
             }
             catch
             {
