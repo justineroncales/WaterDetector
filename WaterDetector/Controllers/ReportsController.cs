@@ -89,5 +89,11 @@ namespace WaterDetector.Controllers
                 return View();
             }
         }
+        public JsonResult UpdateReports(Locations locations)
+        {
+            Users user = new Users();
+            bool result = user.UpdateReports(locations);
+            return Json(Convert.ToString(result), JsonRequestBehavior.AllowGet);
+        }
     }
 }

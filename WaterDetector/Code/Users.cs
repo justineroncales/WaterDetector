@@ -99,6 +99,7 @@ namespace WaterDetector.Code
                     list.FULLNAME = row["FNAME"].ToString();
                     list.MESSAGE = row["MESSAGE"].ToString();
                     list.CREATED = row["CREATED"].ToString();
+                    list.ID = Convert.ToInt32(row["REPORTID"]);
                     users.Add(list);
                 }
             }
@@ -127,6 +128,48 @@ namespace WaterDetector.Code
             }
             return status;
         }
+        public Locations GetUserLocations(int ID)
+        {
+            Locations locations = new Locations();
+
+            using (conn)
+            {
+                DataTable dt = new DataTable();
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("spGetUserLocation", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@reportID", ID);
+                cmd.CommandTimeout = 0;
+                SqlDataAdapter sqlData = new SqlDataAdapter();
+                sqlData.SelectCommand = cmd;
+                sqlData.Fill(dt);
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    locations.Latitude = row["LATITUDE"].ToString();
+                    locations.Longitude = row["LONGITUDE"].ToString();
+                    locations.Message = row["MESSAGE"].ToString();
+                }
+            }
+            return locations;
+        }
+
+        public bool UpdateReports(Locations locations)
+        {
+            using (conn)
+            {
+                DataTable dt = new DataTable();
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("spUpdateReports", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@reportID", locations.Id);
+                cmd.CommandTimeout = 0;
+                cmd.ExecuteNonQuery();
+
+            }
+            return true;
+        }
+
     }
     public class UsersDetails
     {
@@ -145,9 +188,11 @@ namespace WaterDetector.Code
     }
     public class Locations
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string status { get; set; }
-
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        public string Message { get; set; }
     }
     public class UsersClass
     {
