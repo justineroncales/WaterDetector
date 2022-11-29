@@ -36,7 +36,7 @@ namespace WaterDetector.Controllers
             {
                 // TODO: Add insert logic here
                 Users user = new Users();
-                bool result =  user.Register(collection);
+                bool result = user.Register(collection);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -45,15 +45,15 @@ namespace WaterDetector.Controllers
                 return null;
             }
         }
-        
+
         [HttpPost]
-        public ActionResult LocationUpdates(int ID,string status)
+        public ActionResult LocationUpdates(int ID, string status)
         {
             try
             {
                 // TODO: Add insert logic here
                 Users user = new Users();
-                bool result = user.LocationUpdates(ID,status);
+                bool result = user.LocationUpdates(ID, status);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -109,7 +109,7 @@ namespace WaterDetector.Controllers
             try
             {
                 Users users = new Users();
-                string status= users.GetLocations(ID);
+                string status = users.GetLocations(ID);
                 return Json(status, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -138,6 +138,14 @@ namespace WaterDetector.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpGet]
+        public ActionResult GetPlacesStatus()
+        {
+            var user = new Users();
+            var locations = user.GetPlaces();
+            return Json(locations, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -128,6 +128,32 @@ namespace WaterDetector.Code
             }
             return status;
         }
+
+        public List<Locations> GetPlaces()
+        {
+            var locs = new List<Locations>();
+            using (conn)
+            {
+                DataTable dt = new DataTable();
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("spGetPlacesStatus", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandTimeout = 0;
+                SqlDataAdapter sqlData = new SqlDataAdapter();
+                sqlData.SelectCommand = cmd;
+                sqlData.Fill(dt);
+              
+                foreach (DataRow row in dt.Rows)
+                {
+                    var loc = new Locations();
+                    loc.Id = Convert.ToInt32(row["LOCATIONID"]);
+                    loc.Place = row["LOCATIONNAME"].ToString();
+                    loc.Status = row["STATUS"].ToString();
+                    locs.Add(loc);
+                }
+            }
+            return locs;
+        }
         public Locations GetUserLocations(int ID)
         {
             Locations locations = new Locations();
@@ -193,6 +219,8 @@ namespace WaterDetector.Code
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string Message { get; set; }
+        public string Place { get; set; }
+        public string Status { get; set; }
     }
     public class UsersClass
     {
