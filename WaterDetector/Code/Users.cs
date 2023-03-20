@@ -48,7 +48,6 @@ namespace WaterDetector.Code
 
             return result;
         }
-
         public bool LocationUpdates(int ID,string status)
         {
             using (conn)
@@ -179,7 +178,6 @@ namespace WaterDetector.Code
             }
             return locations;
         }
-
         public bool UpdateReports(Locations locations)
         {
             using (conn)
@@ -226,5 +224,10 @@ namespace WaterDetector.Code
     {
         public List<UsersDetails> details { get; set; }
         public List<Locations> locations { get; set; }
+    }
+    public class Contact
+    {
+        public string ContactName { get; set; }
+        public string ContactNo { get; set; }
     }
 }
